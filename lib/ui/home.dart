@@ -77,14 +77,14 @@ Future<Null> _showAddUserDialogBox(BuildContext context) {
             // This button results in adding the contact to the database
             new FlatButton(
                 onPressed: () {
-                  final HttpsCallable callable =
-                      CloudFunctions.instance.getHttpsCallable(
-                    functionName: 'addUser',
-                  );
-                  callable.call(<String, dynamic>{
-                    "name": _nameTextController.text,
-                    "email": _emailTextController.text
-                  });
+//                  final HttpsCallable callable =
+//                      CloudFunctions.instance.getHttpsCallable(
+//                    functionName: 'addUser',
+//                  );
+//                  callable.call(<String, dynamic>{
+//                    "name": _nameTextController.text,
+//                    "email": _emailTextController.text
+//                  });
                   Navigator.of(context).pop();
                 },
                 child: const Text("Confirm")),
@@ -167,16 +167,16 @@ Future<Null> _showEditUserDialog(BuildContext context, DocumentSnapshot userDoc)
             // This button results in adding the contact to the database
             new FlatButton(
                 onPressed: () {
-                  final HttpsCallable callable =
-                  CloudFunctions.instance.getHttpsCallable(
-                    functionName: 'updateUser',
-                  );
-                  callable.call(<String, dynamic>{
-                        "doc_id": userDoc.documentID,
-                        "name": _nameTextController.text,
-                        "email": _emailTextController.text
-                      }
-                  );
+//                  final HttpsCallable callable =
+//                  CloudFunctions.instance.getHttpsCallable(
+//                    functionName: 'updateUser',
+//                  );
+//                  callable.call(<String, dynamic>{
+//                        "doc_id": userDoc.documentID,
+//                        "name": _nameTextController.text,
+//                        "email": _emailTextController.text
+//                      }
+//                  );
                   Navigator.of(context).pop();
                 },
                 child: const Text("Confirm")

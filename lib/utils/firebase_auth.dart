@@ -1,5 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
 
 class AuthProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -10,7 +15,6 @@ class AuthProvider {
           email: email, password: password);
       FirebaseUser user = result.user;
       if (user != null) {
-
         return true;
       } else
         return false;
@@ -37,8 +41,24 @@ class AuthProvider {
         idToken: (await account.authentication).idToken,
         accessToken: (await account.authentication).accessToken,
       ));
-      print('firebase user: ${res.user.providerData[0].displayName}');
+      final authUserData = res.user.providerData[0];
+      final accessToken = (await account.authentication).accessToken;
+      print('firebase user: $authUserData');
       if (res.user == null) return false;
+      try {
+        final url =
+            'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/test';
+        final response = await http.post(
+          url,
+          body: json.encode({
+            'message':authUserData.uid,
+          }),
+          headers: {'Authorization':"Bearer $accessToken"},
+        );
+        print('response of getUserById: ${json.decode(response.body)}');
+      } catch (error) {
+        print('error in sending post request $error');
+      }
       return true;
     } catch (e) {
       print("Error logging with google");
