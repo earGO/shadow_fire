@@ -74,3 +74,4 @@
 
 # firebase and other configs
 **/google-services.json
+**/key.properties
