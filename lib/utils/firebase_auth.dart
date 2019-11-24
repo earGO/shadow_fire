@@ -47,15 +47,22 @@ class AuthProvider {
       if (res.user == null) return false;
       try {
         final url =
-            'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/test';
+            'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/onLogin';
         final response = await http.post(
           url,
-          body: json.encode({
-            'message':authUserData.uid,
-          }),
-          headers: {'Authorization':"Bearer $accessToken"},
+          body: json.encode(
+            {
+              'user': {
+                'uid': authUserData.uid,
+                'email': authUserData.email,
+                'displayName': authUserData.displayName,
+                'photoUrl': authUserData.photoUrl,
+              },
+            },
+          ),
+          headers: {'Authorization': "Bearer $accessToken"},
         );
-        print('response of getUserById: ${json.decode(response.body)}');
+        print('response of onLogin: ${response.body}');
       } catch (error) {
         print('error in sending post request $error');
       }
