@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import '../connected/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -26,10 +27,9 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20.0),
               RaisedButton(
                 child: Text("Login with Google"),
-                onPressed: () async {
-                  bool res = await AuthProvider().loginWithGoogle();
-                  if (!res) print("error logging in with google");
-                },
+                onPressed: () => Provider.of<AuthProvider>(context,listen: false)
+                    .loginWithGoogle()
+
               ),
             ],
           ),

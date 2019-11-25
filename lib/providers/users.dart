@@ -10,15 +10,14 @@ class Users with ChangeNotifier {
   }
 
   List<User> findByName(String name) {
-    return name == '' || name==null
-        ?[..._users]
+    return name == '' || name == null
+        ? [..._users]
         : _users
             .where(
                 (user) => user.name.toLowerCase().contains(name.toLowerCase()))
             .toList();
   }
 
-  Future <void> fetchFilteredUsers(String filterString) async {
 
-  }
+  Future<void> fetchFilteredUsers(String filterString) async {}
 }

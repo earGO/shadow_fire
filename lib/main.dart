@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import './ui/home.dart';
-import './ui/login.dart';
-import './ui/splash.dart';
-import 'package:flutter/services.dart';
+import 'package:shadowrun/screens/main_screen.dart';
+import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/providers/users.dart';
+import 'package:shadowrun/providers/user.dart';
+import 'connected/firebase_auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,30 +42,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ShadowRun 2020',
-      theme: ThemeData(
-        primarySwatch: primaryColorCustom,
-        secondaryHeaderColor:secondaryColorCustom,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: AuthProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: User(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Users(),
+        ),
+      ],
+      child: Consumer<AuthProvider>(
+        builder:(ctx,auth,_)=> MaterialApp(
+          title: 'ShadowRun 2020',
+          theme: ThemeData(
+            primarySwatch: primaryColorCustom,
+            secondaryHeaderColor:secondaryColorCustom,
+          ),
+          home: auth.isAuth ? MainScreen() : LoginPage(),
+          routes: {
+            MainScreen.routeName:(ctx)=>MainScreen(),
+          },
+        ),
       ),
-      home: MainScreen(),
-    );
-  }
-}
-
-
-class MainScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
-      builder: (context,AsyncSnapshot<FirebaseUser> snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting)
-          return SplashPage();
-        if(!snapshot.hasData || snapshot.data == null)
-          return LoginPage();
-        return HomePage();
-      },
     );
   }
 }
