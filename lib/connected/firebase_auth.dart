@@ -5,7 +5,7 @@ import '../providers/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import '../providers/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -23,15 +23,13 @@ class AuthProvider with ChangeNotifier {
 
   String get token {
     if (
-//    _expiryDate != null &&
-//        _expiryDate.isAfter(DateTime.now()) &&
-        _token != null || currentUser!=null) {
+    _expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
       return _token;
     }
     return null;
   }
-
-
 
   String get userId {
     return _userId;
@@ -43,6 +41,15 @@ class AuthProvider with ChangeNotifier {
     try {
       await _auth.signOut();
       _token = null;
+      _userId = null;
+      _expiryDate = null;
+      if (_authTimer != null) {
+        _authTimer.cancel();
+        _authTimer = null;
+      }
+      notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
     } catch (e) {
       print("error logging out");
     }
@@ -53,24 +60,30 @@ class AuthProvider with ChangeNotifier {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn();
       GoogleSignInAccount account = await googleSignIn.signIn();
-      if(account == null )
-        return false;
+      if (account == null) return false;
       final authenticationData = await account.authentication;
-      _token=authenticationData.idToken;
-      AuthResult res = await _auth.signInWithCredential(GoogleAuthProvider.getCredential(
+      _token = authenticationData.accessToken;
+      AuthResult res =
+          await _auth.signInWithCredential(GoogleAuthProvider.getCredential(
         idToken: authenticationData.idToken,
         accessToken: authenticationData.accessToken,
       ));
-      final userData = res.user.providerData[0];
+      var userData = res.user.providerData[0];
       _userId = userData.uid;
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: 36000,
+        ),
+      );
       try {
+
         final url =
             'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/onLogin';
         final response = await http.post(
           url,
           body: json.encode(
             {
-              'user':{
+              'user': {
                 'email': userData.email,
                 'displayName': userData.displayName,
                 'uid': userData.uid,
@@ -78,22 +91,53 @@ class AuthProvider with ChangeNotifier {
               }
             },
           ),
-          headers: {
-            'Authorization': "Bearer ${authenticationData.idToken}"
-          },
+          headers: {'Authorization': "Bearer ${authenticationData.idToken}"},
         );
         final decoded = await json.decode(response.body);
         User endUser = new User.fromJson(decoded);
         currentUser = endUser;
+        _autoLogout();
+        notifyListeners();
+        final prefs = await SharedPreferences.getInstance();
+        final userDataPersisted = json.encode({
+          'token':_token,
+          'userId':_userId,
+          'expiryDate':_expiryDate.toIso8601String(),
+        });
+        prefs.setString('userData',userDataPersisted);
       } catch (error) {
         print('catched error: $error');
       }
-
     } catch (e) {
       print("Error logging with google");
+    }
+  }
+
+  Future<bool> tryAutoLogin()async{
+    final prefs = await SharedPreferences.getInstance();
+    if(!prefs.containsKey('userData')){
       return false;
     }
+    final extractedUserData = json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
 
+    if(expiryDate.isBefore(DateTime.now())){
+      return false;
+    }
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expiryDate = expiryDate;
     notifyListeners();
+    _autoLogout();
+    return true;
+
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpiry), logOut);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shadowrun/screens/main_screen.dart';
+import 'package:shadowrun/screens/splash-screen.dart';
 import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/providers/users.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
     900: Color.fromRGBO(55, 71, 79, 1),
   };
 
-  static final MaterialColor primaryColorCustom = MaterialColor(0xff37474f, primaryColor);
+  static final MaterialColor primaryColorCustom =
+      MaterialColor(0xff37474f, primaryColor);
 
   static final Map<int, Color> secondaryColor = {
     50: Color.fromRGBO(2, 119, 189, .1),
@@ -38,7 +40,8 @@ class MyApp extends StatelessWidget {
     900: Color.fromRGBO(2, 119, 189, 1),
   };
 
-  static final MaterialColor secondaryColorCustom = MaterialColor(0xff0277bd, secondaryColor);
+  static final MaterialColor secondaryColorCustom =
+      MaterialColor(0xff0277bd, secondaryColor);
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +58,23 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Consumer<AuthProvider>(
-        builder:(ctx,auth,_)=> MaterialApp(
+        builder: (ctx, auth, _) => MaterialApp(
           title: 'ShadowRun 2020',
           theme: ThemeData(
             primarySwatch: primaryColorCustom,
-            secondaryHeaderColor:secondaryColorCustom,
+            secondaryHeaderColor: secondaryColorCustom,
           ),
-          home: auth.isAuth ? MainScreen() : LoginPage(),
+          home: auth.isAuth
+              ? MainScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : LoginPage(),
+                ),
           routes: {
-            MainScreen.routeName:(ctx)=>MainScreen(),
+            MainScreen.routeName: (ctx) => MainScreen(),
           },
         ),
       ),
