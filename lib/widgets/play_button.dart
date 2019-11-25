@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class MainScreenSmallIcon extends StatelessWidget {
-  int iconCode;
-
-  MainScreenSmallIcon({this.iconCode});
-
+class PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.only(bottom: 20),
       child: Card(
         child: Container(
-          width: 96,
-          height: 96,
+          width: 328,
+          height: 88,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              print('Card tapped.');
+              print('Play Card tapped.');
             },
             child: Icon(
-              IconData(iconCode, fontFamily: 'MaterialIcons'),
-              size: 65,
+              IconData(57399, fontFamily: 'MaterialIcons'),
+              size: 95,
               color: Theme.of(context).primaryColor,
             ),
           ),
