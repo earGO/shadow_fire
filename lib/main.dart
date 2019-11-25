@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shadowrun/screens/main_screen.dart';
+import 'package:shadowrun/screens/social_screen.dart';
 import 'package:shadowrun/screens/splash-screen.dart';
 import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -51,9 +52,6 @@ class MyApp extends StatelessWidget {
           value: AuthProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: User(),
-        ),
-        ChangeNotifierProvider.value(
           value: Users(),
         ),
       ],
@@ -75,6 +73,7 @@ class MyApp extends StatelessWidget {
                 ),
           routes: {
             MainScreen.routeName: (ctx) => MainScreen(),
+            SocialScreen.routeName:(ctx)=>SocialScreen(),
           },
         ),
       ),

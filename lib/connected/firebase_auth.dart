@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../providers/users.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -15,10 +16,14 @@ class AuthProvider with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
   Timer _authTimer;
-  User currentUser;
+  User _currentUser;
 
   bool get isAuth {
     return token != null;
+  }
+
+  User get currentUser{
+    return _currentUser;
   }
 
   String get token {
@@ -95,7 +100,6 @@ class AuthProvider with ChangeNotifier {
         );
         final decoded = await json.decode(response.body);
         User endUser = new User.fromJson(decoded);
-        currentUser = endUser;
         _autoLogout();
         notifyListeners();
         final prefs = await SharedPreferences.getInstance();

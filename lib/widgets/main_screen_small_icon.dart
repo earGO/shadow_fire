@@ -3,8 +3,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class MainScreenSmallIcon extends StatelessWidget {
   int iconCode;
+  String routeName;
 
-  MainScreenSmallIcon({this.iconCode});
+  MainScreenSmallIcon({this.iconCode,this.routeName});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class MainScreenSmallIcon extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              print('Card tapped.');
+              Navigator.of(context).pushNamed(routeName);
             },
             child: Icon(
               IconData(iconCode, fontFamily: 'MaterialIcons'),
