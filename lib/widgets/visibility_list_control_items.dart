@@ -17,8 +17,6 @@ class VisibilityListControlItems extends StatelessWidget {
     final avatar = Provider.of<User>(context).avatar;
     final currentUser = Provider.of<Users>(context).currentUser;
     final token=Provider.of<AuthProvider>(context).token;
-    final visible = Provider.of<User>(context).visible;
-    print('$name is $visible');
     return ListTile(
         leading: avatar != null
             ? CircleAvatar(
@@ -33,7 +31,7 @@ class VisibilityListControlItems extends StatelessWidget {
             Icons.check_box
                 : Icons.check_box_outline_blank ,
           ),
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).secondaryHeaderColor,
           onPressed: () {
             user.toggleFavoriteStatus(
               token: token,

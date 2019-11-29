@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shadowrun/widgets/visibility_list_builder.dart';
 import 'package:shadowrun/widgets/visibility_list_control_items.dart';
 import 'package:provider/provider.dart';
 import '../providers/users.dart';
@@ -21,12 +22,13 @@ class _VisibilityControlScreenState extends State<VisibilityControlScreen> {
   @override
   void didChangeDependencies() {
     final currentUserToken = Provider.of<AuthProvider>(context).token;
+    final currentUser = Provider.of<Users>(context).currentUser;
     if (_isInit) {
       setState(() {
         _isLoading = true;
       });
       Provider.of<Users>(context)
-          .fetchAndSetAllUsers(token: currentUserToken)
+          .fetchAndSetAllUsers(token: currentUserToken,ownerId: currentUser.uid)
           .then((_) {
         setState(() {
           _isLoading = false;
@@ -39,19 +41,12 @@ class _VisibilityControlScreenState extends State<VisibilityControlScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final usersData = Provider.of<Users>(context).users;
     return Scaffold(
       appBar: AppBar(
         title: Text('Кто меня видит'),
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: usersData.length,
-          itemBuilder: (context, index) => ChangeNotifierProvider.value(
-            value: usersData[index],
-            child: VisibilityListControlItems(),
-          ),
-        ),
+        child:VisibilityListBuilder()
       ),
     );
   }

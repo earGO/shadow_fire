@@ -10,7 +10,6 @@ class User with ChangeNotifier {
   String uid;
   bool wannaHammered;
   bool wantToCommunicate;
-  bool firstTime;
   String avatar;
   num credits;
 
@@ -22,7 +21,6 @@ class User with ChangeNotifier {
     @required this.avatar,
     @required this.wannaHammered,
     @required this.wantToCommunicate,
-    @required this.firstTime,
     @required this.credits,
   });
 
@@ -44,13 +42,8 @@ class User with ChangeNotifier {
       avatar: parsedJson['user']['avatar'],
       wannaHammered: parsedJson['user']['wannaHammered'],
       wantToCommunicate: parsedJson['user']['wantToCommunicate'],
-      firstTime: parsedJson['user']['firstTime'],
       credits: parsedJson['user']['credits'],
     );
-  }
-
-  void toggleFavorite(newValue) {
-    _setVisibleToUser(newValue);
   }
 
   Future<void> toggleFavoriteStatus({String token, String arrayId,String ownerId}) async {
@@ -70,8 +63,9 @@ class User with ChangeNotifier {
             'arrayId':arrayId
           }),
         );
-        print(json.decode(response.body));
-        if (json.decode(response.body).message != 'good') {
+        final responseData = await json.decode(response.body) as Map<String,dynamic>;
+        final responseMessage = responseData['message'];
+        if (responseMessage != 'good') {
           _setVisibleToUser(oldStatus);
         }
       } catch (error) {
@@ -88,14 +82,15 @@ class User with ChangeNotifier {
             'arrayId':arrayId
           }),
         );
-        if (json.decode(response.body).message != 'good') {
+        final responseData = await json.decode(response.body) as Map<String,dynamic>;
+        final responseMessage = responseData['message'];
+        if (responseMessage != 'good') {
           _setVisibleToUser(oldStatus);
         }
       } catch (error) {
         _setVisibleToUser(oldStatus);
       }
     }
-
   }
 
 }

@@ -42,7 +42,7 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetAllUsers({String token}) async {
+  Future<void> fetchAndSetAllUsers({String token, String ownerId}) async {
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/getAllUsers';
     try {
@@ -50,11 +50,24 @@ class Users with ChangeNotifier {
         url,
         headers: {'Authorization': "Bearer $token"},
       );
+
       final extractedData =
            json.decode(response.body)['users'];
       if (extractedData == null) {
         return;
       }
+      final visibleUrl = 'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/getVisibilityArray';
+      final visibleResponse = await http.post(
+        visibleUrl,
+        body: json.encode({
+          'ownerId':ownerId
+        }),
+        headers: {'Authorization': "Bearer $token"},
+      );
+      final visibleData = json.decode(visibleResponse.body) as Map<String, dynamic>;
+      final visibleArray = visibleData['visibility'];
+      print(visibleArray);
+      print(ownerId);
       final List<User> loadedUsers=[];
       extractedData.forEach((userData) {
         loadedUsers.add(User(
@@ -63,7 +76,8 @@ class Users with ChangeNotifier {
           name: userData['name'],
           email: userData['email'],
           credits: userData['credits'],
-          visible: userData['visible'],
+          visible: visibleArray == null? false :
+            visibleArray.contains(ownerId),
           wannaHammered: userData['wantToBeHammered'],
           wantToCommunicate: userData['wantToCommunicate']
 
