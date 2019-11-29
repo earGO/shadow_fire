@@ -9,7 +9,8 @@ class VisibilityControlScreen extends StatefulWidget {
   static String routeName = '/VisibilityControlScreen';
 
   @override
-  _VisibilityControlScreenState createState() => _VisibilityControlScreenState();
+  _VisibilityControlScreenState createState() =>
+      _VisibilityControlScreenState();
 }
 
 class _VisibilityControlScreenState extends State<VisibilityControlScreen> {
@@ -24,7 +25,9 @@ class _VisibilityControlScreenState extends State<VisibilityControlScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Users>(context).fetchAndSetAllUsers(token: currentUserToken).then((_) {
+      Provider.of<Users>(context)
+          .fetchAndSetAllUsers(token: currentUserToken)
+          .then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -42,13 +45,13 @@ class _VisibilityControlScreenState extends State<VisibilityControlScreen> {
         title: Text('Кто меня видит'),
       ),
       body: Center(
-child:ListView.builder(
-                itemCount: usersData.length,
-                itemBuilder: (context, index) =>
-                ChangeNotifierProvider.value( value: usersData[index],
-                  child: VisibilityListControlItems(),)
-
-                  ),
+        child: ListView.builder(
+          itemCount: usersData.length,
+          itemBuilder: (context, index) => ChangeNotifierProvider.value(
+            value: usersData[index],
+            child: VisibilityListControlItems(),
+          ),
+        ),
       ),
     );
   }

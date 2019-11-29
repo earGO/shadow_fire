@@ -70,6 +70,7 @@ class User with ChangeNotifier {
             'arrayId':arrayId
           }),
         );
+        print(json.decode(response.body));
         if (json.decode(response.body).message != 'good') {
           _setVisibleToUser(oldStatus);
         }
