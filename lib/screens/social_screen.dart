@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/connected/firebase_auth.dart';
+import 'package:shadowrun/screens/visibility_control_screen.dart';
 import 'package:shadowrun/widgets/visibility_switch.dart';
 import '../providers/users.dart';
 
@@ -53,7 +54,7 @@ class _SocialScreenState extends State<SocialScreen> {
           ),
           RaisedButton(
             onPressed: () {
-              print('WHo sees me tapped');
+              Navigator.of(context).pushNamed(VisibilityControlScreen.routeName);
             },
           )
         ],

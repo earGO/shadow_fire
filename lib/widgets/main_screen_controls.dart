@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shadowrun/screens/installed_implants.dart';
+import 'package:shadowrun/screens/messages_screen.dart';
+import 'package:shadowrun/screens/profile_screen.dart';
+import 'package:shadowrun/screens/shop.dart';
 
 import 'package:shadowrun/widgets/main_screen_small_icon.dart';
 import 'package:shadowrun/widgets/play_button.dart';
@@ -7,7 +11,6 @@ import 'package:shadowrun/providers/users.dart';
 
 import 'package:shadowrun/connected/firebase_auth.dart';
 import 'package:shadowrun/screens/social_screen.dart';
-
 
 class MainScreenControls extends StatelessWidget {
   @override
@@ -33,7 +36,8 @@ class MainScreenControls extends StatelessWidget {
                           fontWeight: FontWeight.w400),
                     ),
                   if (user != null)
-                    Text('\$ ${user.credits}',
+                    Text(
+                      '\$ ${user.credits}',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -66,13 +70,15 @@ class MainScreenControls extends StatelessWidget {
                           children: <Widget>[
                             MainScreenSmallIcon(
                               iconCode: 59504,
-
+                              routeName: Shop.routeName,
                             ),
                             MainScreenSmallIcon(
                               iconCode: 58146,
+                              routeName: InstalledImplants.routeName,
                             ),
                             MainScreenSmallIcon(
                               iconCode: 57534,
+                              routeName: MessagesScreen.routeName,
                             ),
                           ],
                         ),
@@ -85,6 +91,7 @@ class MainScreenControls extends StatelessWidget {
                             ),
                             MainScreenSmallIcon(
                               iconCode: 59389,
+                              routeName: ProfileScreen.routeName,
                             ),
                           ],
                         ),

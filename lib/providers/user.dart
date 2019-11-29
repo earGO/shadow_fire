@@ -52,4 +52,49 @@ class User with ChangeNotifier {
   void toggleFavorite(newValue) {
     _setVisibleToUser(newValue);
   }
+
+  Future<void> toggleFavoriteStatus({String token, String arrayId,String ownerId}) async {
+    // here arrayID is the ID of a user we want to be visible to
+    //ownerId is the ID of a user,logged into and app;
+    final oldStatus = visible;
+    visible = !visible;
+    notifyListeners();
+    if(visible==true){
+      final url =
+          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/addToVisible';
+      try {
+        final response = await http.post(
+          url,
+          body: json.encode({
+           'ownerId':ownerId,
+            'arrayId':arrayId
+          }),
+        );
+        if (json.decode(response.body).message != 'good') {
+          _setVisibleToUser(oldStatus);
+        }
+      } catch (error) {
+        _setVisibleToUser(oldStatus);
+      }
+    } else {
+      final url =
+          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/removeFromVisible';
+      try {
+        final response = await http.post(
+          url,
+          body: json.encode({
+            'ownerId':ownerId,
+            'arrayId':arrayId
+          }),
+        );
+        if (json.decode(response.body).message != 'good') {
+          _setVisibleToUser(oldStatus);
+        }
+      } catch (error) {
+        _setVisibleToUser(oldStatus);
+      }
+    }
+
+  }
+
 }

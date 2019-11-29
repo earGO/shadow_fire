@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shadowrun/screens/checkpoints_list_screen.dart';
+import 'package:shadowrun/screens/installed_implants.dart';
 import 'package:shadowrun/screens/main_screen.dart';
+import 'package:shadowrun/screens/messages_screen.dart';
+import 'package:shadowrun/screens/profile_screen.dart';
+import 'package:shadowrun/screens/shop.dart';
 import 'package:shadowrun/screens/social_screen.dart';
 import 'package:shadowrun/screens/splash-screen.dart';
+import 'package:shadowrun/screens/visibility_control_screen.dart';
 import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/providers/users.dart';
@@ -74,6 +80,12 @@ class MyApp extends StatelessWidget {
           routes: {
             MainScreen.routeName: (ctx) => MainScreen(),
             SocialScreen.routeName:(ctx)=>SocialScreen(),
+            InstalledImplants.routeName:(ctx)=>InstalledImplants(),
+            Shop.routeName:(ctx)=>Shop(),
+            ProfileScreen.routeName:(ctx)=>ProfileScreen(),
+            MessagesScreen.routeName:(ctx)=>MessagesScreen(),
+            CheckpointsListScreen.routeName:(ctx)=>CheckpointsListScreen(),
+            VisibilityControlScreen.routeName:(ctx)=>VisibilityControlScreen(),
           },
         ),
       ),

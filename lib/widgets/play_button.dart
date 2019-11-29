@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shadowrun/screens/checkpoints_list_screen.dart';
 
 class PlayButton extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class PlayButton extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              print('Play Card tapped.');
+              Navigator.of(context).pushNamed(CheckpointsListScreen.routeName);
             },
             child: Icon(
               IconData(57399, fontFamily: 'MaterialIcons'),
