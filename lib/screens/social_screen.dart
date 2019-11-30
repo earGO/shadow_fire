@@ -6,7 +6,6 @@ import 'package:shadowrun/widgets/visibility_switch.dart';
 import '../providers/users.dart';
 
 class SocialScreen extends StatefulWidget {
-
   static String routeName = '/status-and-visibility';
   SocialScreen({Key key}) : super(key: key);
 
@@ -29,6 +28,7 @@ class _SocialScreenState extends State<SocialScreen> {
       _wantToGetHammered = val;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<Users>(context).currentUser;
@@ -48,14 +48,24 @@ class _SocialScreenState extends State<SocialScreen> {
             switchHandler: handleCommunicate,
           ),
           VisibilitySwitch(
-            title: 'Алкогольной ямы',
+            title: 'Огня',
             value: _wantToGetHammered,
             switchHandler: handleHammered,
           ),
-          RaisedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(VisibilityControlScreen.routeName);
+          InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(VisibilityControlScreen.routeName);
             },
+            child: ListTile(
+              title: Text('Кто меня видит'),
+              trailing: Icon(
+                IconData(
+                  58133,
+                  fontFamily: 'MaterialIcons',
+                ),
+              ),
+            ),
           )
         ],
       ),

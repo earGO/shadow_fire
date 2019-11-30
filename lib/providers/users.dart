@@ -66,7 +66,7 @@ class Users with ChangeNotifier {
       );
       final visibleData = json.decode(visibleResponse.body) as Map<String, dynamic>;
       final visibleArray = visibleData['visibility'];
-      print(visibleArray);
+      print(visibleArray.contains(ownerId));
       print(ownerId);
       final List<User> loadedUsers=[];
       extractedData.forEach((userData) {
@@ -77,7 +77,7 @@ class Users with ChangeNotifier {
           email: userData['email'],
           credits: userData['credits'],
           visible: visibleArray == null? false :
-            visibleArray.contains(ownerId),
+            visibleArray.contains(userData['uid']),
           wannaHammered: userData['wantToBeHammered'],
           wantToCommunicate: userData['wantToCommunicate']
 
