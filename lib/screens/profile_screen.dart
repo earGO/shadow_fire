@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shadowrun/screens/game_rules_screen.dart';
 import 'package:shadowrun/screens/login_screen.dart';
+import 'package:shadowrun/screens/name_screen.dart';
 import '../providers/users.dart';
 import '../connected/firebase_auth.dart';
 
@@ -54,16 +56,20 @@ class ProfileScreen extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text('Обзор профиля'),
+              title: Text('Имя в игре'),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(NameScreen.routeName);
+              },
             ),
             Divider(),
             ListTile(
               leading: Icon(Icons.mood),
-              title: Text('Бежать маршрут'),
+              title: Text('Правила'),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(GameRulesScreen.routeName);
+              },
             ),
             Divider(),
             SizedBox(

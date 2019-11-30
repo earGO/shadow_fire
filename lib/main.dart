@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shadowrun/screens/checkpoints_list_screen.dart';
+import 'package:shadowrun/screens/game_rules_screen.dart';
 import 'package:shadowrun/screens/installed_implants.dart';
 import 'package:shadowrun/screens/main_screen.dart';
 import 'package:shadowrun/screens/messages_screen.dart';
+import 'package:shadowrun/screens/name_screen.dart';
 import 'package:shadowrun/screens/profile_screen.dart';
 import 'package:shadowrun/screens/shop.dart';
 import 'package:shadowrun/screens/social_screen.dart';
@@ -89,6 +91,8 @@ class MyApp extends StatelessWidget {
             VisibilityControlScreen.routeName:(ctx)=>VisibilityControlScreen(),
             UserNameScreen.routeName:(ctx)=>UserNameScreen(),
             LoginPage.routeName:(ctx)=>LoginPage(),
+            NameScreen.routeName:(ctx)=>NameScreen(),
+            GameRulesScreen.routeName:(ctx)=>GameRulesScreen(),
           },
         ),
       ),

@@ -9,6 +9,7 @@ class SplashScreen extends StatelessWidget {
           image: AssetImage('icon-f.png'),
         ),
       ),
+      backgroundColor: Theme.of(context).primaryColor,
     );
   }
 }
