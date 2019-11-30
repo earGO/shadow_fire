@@ -5,11 +5,6 @@ import '../providers/users.dart';
 import '../connected/firebase_auth.dart';
 
 class VisibilityListControlItems extends StatelessWidget {
-//  final String name;
-//  final String photoUrl;
-//  final String uid;
-//
-//  VisibilityListControlItems({this.name, this.uid, this.photoUrl});
 
   @override
   Widget build(BuildContext context) {

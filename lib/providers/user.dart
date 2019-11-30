@@ -8,7 +8,7 @@ class User with ChangeNotifier {
   String email;
   bool visible;
   String uid;
-  bool wannaHammered;
+  bool wantToBeHammered;
   bool wantToCommunicate;
   String avatar;
   num credits;
@@ -19,13 +19,17 @@ class User with ChangeNotifier {
     @required this.email,
     @required this.uid,
     @required this.avatar,
-    @required this.wannaHammered,
+    @required this.wantToBeHammered,
     @required this.wantToCommunicate,
     @required this.credits,
   });
 
   get getUser {
     return this;
+  }
+
+  get wantHammered{
+    return wantToBeHammered;
   }
 
   void _setVisibleToUser(bool newValue) {
@@ -40,7 +44,7 @@ class User with ChangeNotifier {
       visible: parsedJson['user']['visible'],
       uid: parsedJson['user']['uid'],
       avatar: parsedJson['user']['avatar'],
-      wannaHammered: parsedJson['user']['wannaHammered'],
+      wantToBeHammered: parsedJson['user']['wantToBeHammered'],
       wantToCommunicate: parsedJson['user']['wantToCommunicate'],
       credits: parsedJson['user']['credits'],
     );

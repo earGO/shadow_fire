@@ -20,7 +20,7 @@ class WhoAndWhereItem extends StatelessWidget {
         width: 30,
         child: Row(
           children: <Widget>[
-            if (user.wannaHammered)
+            if (user.wantToBeHammered)
               Icon(
                 IconData(59406, fontFamily: 'MaterialIcons'),
                 color: Theme.of(context).secondaryHeaderColor,

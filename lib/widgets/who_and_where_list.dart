@@ -8,7 +8,10 @@ class WhoAndWhereList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visibleUsers = Provider.of<Users>(context,listen: false).visibleUsers;
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context,index)=>Divider(
+        color: Theme.of(context).primaryColorLight,
+      ),
       itemCount: visibleUsers.length,
       itemBuilder: (ctx, index) => WhoAndWhereItem(visibleUsers[index]),
     );

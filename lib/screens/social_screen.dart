@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/connected/firebase_auth.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
+import 'package:shadowrun/widgets/set_communicate.dart';
+import 'package:shadowrun/widgets/set_hammered.dart';
 import 'package:shadowrun/widgets/visibility_switch.dart';
 import 'package:shadowrun/widgets/who_and_where_list.dart';
 import 'package:shadowrun/providers/users.dart';
@@ -20,11 +22,13 @@ class _SocialScreenState extends State<SocialScreen> {
   var _showOnlyFavorites = false;
   var _isInit = true;
   var _isLoading = false;
+  String currentToken;
 
   @override
   void didChangeDependencies() {
     final currentUserToken = Provider.of<AuthProvider>(context).token;
     final currentUser = Provider.of<Users>(context).currentUser;
+    currentToken = currentUserToken;
     if (_isInit) {
       setState(() {
         _isLoading = true;
@@ -56,46 +60,57 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<Users>(context).currentUser;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Хочу'),
-      ),
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 16,
-          ),
-          VisibilitySwitch(
-            title: 'Общения',
-            value: _wantToCommunicate,
-            switchHandler: handleCommunicate,
-          ),
-          VisibilitySwitch(
-            title: 'Огня',
-            value: _wantToGetHammered,
-            switchHandler: handleHammered,
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(VisibilityControlScreen.routeName);
-            },
-            child: ListTile(
-              title: Text('Кто меня видит'),
-              trailing: Icon(
-                IconData(
-                  58133,
-                  fontFamily: 'MaterialIcons',
-                ),
-              ),
+    return _isLoading == true
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Хочу'),
             ),
-          ),
-          Expanded(
-            child: WhoAndWhereList(),
-          ),
-        ],
-      ),
-    );
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 16,
+                ),
+                SetCommunicate(),
+                SetHammered(),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(VisibilityControlScreen.routeName);
+                  },
+                  child: ListTile(
+                    title: Text('Кто меня видит'),
+                    trailing: Icon(
+                      IconData(
+                        58133,
+                        fontFamily: 'MaterialIcons',
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    top: 8,
+                    bottom: 12,
+                  ),
+                  child: Text(
+                    'Кто гдe',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: WhoAndWhereList(),
+                ),
+              ],
+            ),
+          );
   }
 }

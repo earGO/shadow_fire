@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/users.dart';
+import '../connected/firebase_auth.dart';
 
-class VisibilitySwitch extends StatelessWidget {
-  final void switchHandler;
-  final num iconDataNumber;
-  final String title;
-  final bool value;
-
-  VisibilitySwitch(
-      {this.title, this.value, this.switchHandler, this.iconDataNumber});
-
+class SetHammered extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final value=Provider.of<Users>(context).currentHammered;
+    final token=Provider.of<AuthProvider>(context).token;
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: 0,
@@ -18,7 +15,7 @@ class VisibilitySwitch extends StatelessWidget {
       ),
       child: ListTile(
         leading: Text(
-          title,
+          'Огня',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16,
@@ -27,12 +24,12 @@ class VisibilitySwitch extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(
             IconData(
-              iconDataNumber,
+              59406,
               fontFamily: 'MaterialIcons',
             ),
             color: value ? Theme.of(context).secondaryHeaderColor : Theme.of(context).primaryColorLight,
           ),
-          onPressed: () {},
+          onPressed: () {Provider.of<Users>(context,listen: false).toggleCurrentUserHammered(token: token);},
         ),
       ),
     );
