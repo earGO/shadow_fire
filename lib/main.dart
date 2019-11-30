@@ -8,6 +8,7 @@ import 'package:shadowrun/screens/profile_screen.dart';
 import 'package:shadowrun/screens/shop.dart';
 import 'package:shadowrun/screens/social_screen.dart';
 import 'package:shadowrun/screens/splash-screen.dart';
+import 'package:shadowrun/screens/user_name_screen.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
 import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -86,6 +87,7 @@ class MyApp extends StatelessWidget {
             MessagesScreen.routeName:(ctx)=>MessagesScreen(),
             CheckpointsListScreen.routeName:(ctx)=>CheckpointsListScreen(),
             VisibilityControlScreen.routeName:(ctx)=>VisibilityControlScreen(),
+            UserNameScreen.routeName:(ctx)=>UserNameScreen(),
           },
         ),
       ),

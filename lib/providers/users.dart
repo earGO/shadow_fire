@@ -122,7 +122,6 @@ class Users with ChangeNotifier {
   Future<void> fetchVisibleUsers({String token, String currentUserId}) async {
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/getVisibleUsers';
-    try {
       final response = await http.post(
         url,
         body: json.encode({'userId': currentUserId}),
@@ -147,9 +146,6 @@ class Users with ChangeNotifier {
       });
       _visibleUsers = loadedUsers;
       notifyListeners();
-    } catch (error) {
-      throw (error);
-    }
   }
 
   Future<void> toggleCurrentUserHammered({String token}) async {

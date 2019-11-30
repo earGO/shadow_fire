@@ -17,9 +17,6 @@ class SocialScreen extends StatefulWidget {
 }
 
 class _SocialScreenState extends State<SocialScreen> {
-  bool _wantToCommunicate = false;
-  bool _wantToGetHammered = false;
-  var _showOnlyFavorites = false;
   var _isInit = true;
   var _isLoading = false;
   String currentToken;
@@ -46,17 +43,6 @@ class _SocialScreenState extends State<SocialScreen> {
     super.didChangeDependencies();
   }
 
-  void handleCommunicate(val) {
-    setState(() {
-      _wantToCommunicate = val;
-    });
-  }
-
-  void handleHammered(val) {
-    setState(() {
-      _wantToGetHammered = val;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
