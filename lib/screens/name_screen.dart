@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shadowrun/providers/user.dart';
+import '../providers/users.dart';
+import '../connected/firebase_auth.dart';
 
 class NameScreen extends StatefulWidget {
   static String routeName = '/game-name';
@@ -12,6 +16,17 @@ class _NameScreenState extends State<NameScreen> {
   final _nameFocusNode = FocusNode();
   var _isInit = true;
   var _isLoading = false;
+  var _token = '';
+  var _editedUser = User(
+    name: '',
+    uid: '',
+    email: '',
+    avatar: '',
+    wantToCommunicate: false,
+    wantToBeHammered: false,
+    credits: 0,
+    visible: false
+  );
   final _form = GlobalKey<FormState>();
   var _initValues = {
     'name': '',
@@ -30,11 +45,17 @@ class _NameScreenState extends State<NameScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context).settings.arguments as String;
-      if (productId != null) {}
-      _isInit = false;
-
+       _editedUser = Provider.of<Users>(context).currentUser;
+      final currentToken = Provider.of<AuthProvider>(context).token;
+      final currentName = _editedUser.getUser.name;
+      if (currentName != null) {
+        _token = currentToken;
+        _initValues = {
+          'name': currentName,
+        };
+      }
     }
+    _isInit = false;
     super.didChangeDependencies();
   }
 
@@ -49,6 +70,13 @@ class _NameScreenState extends State<NameScreen> {
     if (!isValid) {
       return;
     }
+    _form.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    if(_editedUser.getUser.uid !=null){
+      
+    }
   }
 
   @override
@@ -59,22 +87,21 @@ class _NameScreenState extends State<NameScreen> {
       ),
       body: _isLoading
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 32),
-        child:
-            Form(
-              key: _form,
-              child: Column(
-                children: <Widget>[
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 32),
+              child: Form(
+                key: _form,
+                child: Column(children: <Widget>[
                   TextFormField(
                     initialValue: _initValues['name'],
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         hintText: "Имя",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(6.0))),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6.0))),
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 8),
@@ -93,10 +120,9 @@ class _NameScreenState extends State<NameScreen> {
                       onPressed: _saveForm,
                     ),
                   ),
-                ]
+                ]),
               ),
             ),
-        ),
-      );
+    );
   }
 }

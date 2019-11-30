@@ -16,6 +16,8 @@ class MainScreenControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<Users>(context).currentUser;
+    final credits = Provider.of<Users>(context).currentCredits;
+    final name = Provider.of<Users>(context).currentName;
     return Padding(
       padding: EdgeInsets.only(bottom: 84),
       child: Column(
@@ -29,7 +31,7 @@ class MainScreenControls extends StatelessWidget {
                 children: <Widget>[
                   if (user != null)
                     Text(
-                      'Shadowrunner ${user.name.split(' ')[0]}',
+                      'Shadowrunner ${name.split(' ')[0]}',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -37,7 +39,7 @@ class MainScreenControls extends StatelessWidget {
                     ),
                   if (user != null)
                     Text(
-                      '\$ ${user.credits}',
+                      '\$ ${credits.toString()}',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

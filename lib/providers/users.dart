@@ -12,6 +12,9 @@ class Users with ChangeNotifier {
   User _currentUser;
   bool _currentHammered;
   bool _currentCommunicate;
+  String _currentName;
+  num _currentCredits;
+
 
   List<User> get users {
     return [..._users];
@@ -23,6 +26,14 @@ class Users with ChangeNotifier {
 
   bool get currentCommunicate{
     return _currentCommunicate;
+  }
+
+  String get currentName{
+    return _currentName;
+  }
+
+  num get currentCredits{
+    return _currentCredits;
   }
 
 
@@ -52,6 +63,16 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
+  void _setCurrentName(String newValue){
+    _currentName = newValue;
+    notifyListeners();
+  }
+
+  void _setCurrentCredits(num newValue){
+    _currentCredits = newValue;
+    notifyListeners();
+  }
+
   Future<void> fetchAndSetUser({String uid, String token}) async {
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/fetchUser';
@@ -67,6 +88,8 @@ class Users with ChangeNotifier {
     _currentUser = workUser;
     _setCurrentHammered(workUser.getUser.wantHammered);
     _setCurrentCommunicate(workUser.getUser.wantToCommunicate);
+    _setCurrentName(workUser.getUser.name);
+    _setCurrentCredits(workUser.getUser.credits);
     notifyListeners();
   }
 
@@ -105,7 +128,7 @@ class Users with ChangeNotifier {
             avatar: userData['avatar'],
             name: userData['name'],
             email: userData['email'],
-            credits: userData['credits'],
+            credits: int.parse(userData['credits']),
             visible: visibleArray == null
                 ? false
                 : visibleArray.contains(userData['uid']),
@@ -193,6 +216,10 @@ class Users with ChangeNotifier {
     } catch (error) {
       _setCurrentCommunicate(oldCommunicate);
     }
+
+  }
+
+  Future<void> changeUserName({String token, String userId, String newName}) async {
 
   }
 }
