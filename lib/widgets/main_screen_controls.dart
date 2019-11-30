@@ -50,15 +50,7 @@ class MainScreenControls extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text('Main screen'),
-                  if (user != null) Text('Hello, ${user.name}'),
-                  RaisedButton(
-                    child: Text("Log out"),
-                    onPressed: () {
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .logOut();
-                    },
-                  ),
+
                   Container(
                     height: 280,
                     padding: EdgeInsets.only(bottom: 40),

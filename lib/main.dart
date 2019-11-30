@@ -88,6 +88,7 @@ class MyApp extends StatelessWidget {
             CheckpointsListScreen.routeName:(ctx)=>CheckpointsListScreen(),
             VisibilityControlScreen.routeName:(ctx)=>VisibilityControlScreen(),
             UserNameScreen.routeName:(ctx)=>UserNameScreen(),
+            LoginPage.routeName:(ctx)=>LoginPage(),
           },
         ),
       ),

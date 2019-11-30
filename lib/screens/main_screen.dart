@@ -5,7 +5,6 @@ import 'package:shadowrun/widgets/main_screen_controls.dart';
 
 import '../connected/firebase_auth.dart';
 
-
 class MainScreen extends StatefulWidget {
   static String routeName = '/main';
 
@@ -19,30 +18,33 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     final uid = Provider.of<AuthProvider>(context).userId;
     final token = Provider.of<AuthProvider>(context).token;
     if (_isInit) {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Users>(context,listen: false).fetchAndSetUser(uid: uid,token: token).then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+      Provider.of<Users>(context, listen: false)
+          .fetchAndSetUser(uid: uid, token: token)
+          .then((_) {
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       });
     }
     _isInit = false;
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AuthProvider>(context).currentUser;
     return Scaffold(
       body: _isLoading
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : MainScreenControls(),
       backgroundColor: Theme.of(context).primaryColor,
     );

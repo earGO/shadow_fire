@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../connected/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
+  static String routeName = '/login';
   @override
   _LoginPageState createState() => _LoginPageState();
 }
