@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:shadowrun/connected/firebase_auth.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
 import 'package:shadowrun/widgets/visibility_switch.dart';
-import '../providers/users.dart';
+import 'package:shadowrun/widgets/who_and_where_list.dart';
+import 'package:shadowrun/providers/users.dart';
 
 class SocialScreen extends StatefulWidget {
   static String routeName = '/status-and-visibility';
@@ -16,6 +17,30 @@ class SocialScreen extends StatefulWidget {
 class _SocialScreenState extends State<SocialScreen> {
   bool _wantToCommunicate = false;
   bool _wantToGetHammered = false;
+  var _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    final currentUserToken = Provider.of<AuthProvider>(context).token;
+    final currentUser = Provider.of<Users>(context).currentUser;
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Users>(context)
+          .fetchVisibleUsers(
+              token: currentUserToken, currentUserId: currentUser.uid)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   void handleCommunicate(val) {
     setState(() {
@@ -32,7 +57,6 @@ class _SocialScreenState extends State<SocialScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<Users>(context).currentUser;
-    print(currentUser);
     return Scaffold(
       appBar: AppBar(
         title: Text('Хочу'),
@@ -66,7 +90,10 @@ class _SocialScreenState extends State<SocialScreen> {
                 ),
               ),
             ),
-          )
+          ),
+          Expanded(
+            child: WhoAndWhereList(),
+          ),
         ],
       ),
     );
