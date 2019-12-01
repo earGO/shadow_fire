@@ -128,7 +128,7 @@ class Users with ChangeNotifier {
             avatar: userData['avatar'],
             name: userData['name'],
             email: userData['email'],
-            credits: int.parse(userData['credits']),
+            credits: userData['credits'],
             visible: visibleArray == null
                 ? false
                 : visibleArray.contains(userData['uid']),
@@ -137,6 +137,7 @@ class Users with ChangeNotifier {
       });
       _users = loadedUsers;
       notifyListeners();
+
     } catch (error) {
       throw (error);
     }
@@ -219,7 +220,30 @@ class Users with ChangeNotifier {
 
   }
 
-  Future<void> changeUserName({String token, String userId, String newName}) async {
-
+  Future<void> changeUserName({String token, String newName}) async {
+    final oldName = currentName;
+    _setCurrentName(newName);
+    final url =
+        'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/updateUserName';
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'userId':_currentUser.uid,
+          'newName':newName,
+        }),
+        headers: {'Authorization': "Bearer $token"},
+      );
+      final responseData = await json.decode(response.body) as Map<String,dynamic>;
+      final responseMessage = responseData['message'];
+      notifyListeners();
+      fetchAndSetUser(token: token,uid: currentUser.getUser.uid);
+      if (responseMessage != 'good') {
+        _setCurrentName(oldName);
+      }
+    } catch (error) {
+      _setCurrentName(oldName);
+    }
+    notifyListeners();
   }
 }

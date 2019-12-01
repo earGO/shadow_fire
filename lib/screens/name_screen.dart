@@ -17,20 +17,9 @@ class _NameScreenState extends State<NameScreen> {
   var _isInit = true;
   var _isLoading = false;
   var _token = '';
-  var _editedUser = User(
-    name: '',
-    uid: '',
-    email: '',
-    avatar: '',
-    wantToCommunicate: false,
-    wantToBeHammered: false,
-    credits: 0,
-    visible: false
-  );
+  var _editedUserName = '';
   final _form = GlobalKey<FormState>();
-  var _initValues = {
-    'name': '',
-  };
+  var _initialValue = '';
 
   void _updateName() {
     setState(() {});
@@ -45,15 +34,8 @@ class _NameScreenState extends State<NameScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-       _editedUser = Provider.of<Users>(context).currentUser;
-      final currentToken = Provider.of<AuthProvider>(context).token;
-      final currentName = _editedUser.getUser.name;
-      if (currentName != null) {
-        _token = currentToken;
-        _initValues = {
-          'name': currentName,
-        };
-      }
+      _token = Provider.of<AuthProvider>(context).token;
+      _initialValue = Provider.of<Users>(context).currentUser.getUser.name;
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -62,6 +44,7 @@ class _NameScreenState extends State<NameScreen> {
   @override
   void dispose() {
     _nameFocusNode.removeListener(_updateName);
+    _isInit = true;
     super.dispose();
   }
 
@@ -74,9 +57,16 @@ class _NameScreenState extends State<NameScreen> {
     setState(() {
       _isLoading = true;
     });
-    if(_editedUser.getUser.uid !=null){
-      
+    if (_editedUserName != '') {
+      await Provider.of<Users>(context, listen: false)
+          .changeUserName(token: _token, newName: _editedUserName);
     }
+    if (this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -95,13 +85,25 @@ class _NameScreenState extends State<NameScreen> {
                 key: _form,
                 child: Column(children: <Widget>[
                   TextFormField(
-                    initialValue: _initValues['name'],
+                    initialValue: _initialValue,
                     decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Имя",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0))),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      hintText: "Имя",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                    ),
+                    textInputAction: TextInputAction.done,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Поле не должно быть пустым';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _editedUserName = value;
+                    },
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 8),
