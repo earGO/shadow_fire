@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Shadowrun 2020"
+        android:label="White Eagle Eye"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
