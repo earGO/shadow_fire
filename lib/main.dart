@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shadowrun/screens/check_in_screen.dart';
 import 'package:shadowrun/screens/checkpoints_list_screen.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
 import 'package:shadowrun/screens/installed_implants.dart';
@@ -15,7 +16,7 @@ import 'package:shadowrun/screens/visibility_control_screen.dart';
 import './screens/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/providers/users.dart';
-import 'package:shadowrun/providers/user.dart';
+import 'package:shadowrun/providers/locations.dart';
 import 'connected/firebase_auth.dart';
 
 void main() => runApp(MyApp());
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Users(),
         ),
+        ChangeNotifierProvider.value(
+          value: Locations(),
+        ),
       ],
       child: Consumer<AuthProvider>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -82,17 +86,20 @@ class MyApp extends StatelessWidget {
                 ),
           routes: {
             MainScreen.routeName: (ctx) => MainScreen(),
-            SocialScreen.routeName:(ctx)=>SocialScreen(),
-            InstalledImplants.routeName:(ctx)=>InstalledImplants(),
-            Shop.routeName:(ctx)=>Shop(),
-            ProfileScreen.routeName:(ctx)=>ProfileScreen(),
-            MessagesScreen.routeName:(ctx)=>MessagesScreen(),
-            CheckpointsListScreen.routeName:(ctx)=>CheckpointsListScreen(),
-            VisibilityControlScreen.routeName:(ctx)=>VisibilityControlScreen(),
-            UserNameScreen.routeName:(ctx)=>UserNameScreen(),
-            LoginPage.routeName:(ctx)=>LoginPage(),
-            NameScreen.routeName:(ctx)=>NameScreen(),
-            GameRulesScreen.routeName:(ctx)=>GameRulesScreen(),
+            SocialScreen.routeName: (ctx) => SocialScreen(),
+            InstalledImplants.routeName: (ctx) => InstalledImplants(),
+            Shop.routeName: (ctx) => Shop(),
+            ProfileScreen.routeName: (ctx) => ProfileScreen(),
+            MessagesScreen.routeName: (ctx) => MessagesScreen(),
+            CheckpointsListScreen.routeName: (ctx) => CheckpointsListScreen(),
+            VisibilityControlScreen.routeName: (ctx) =>
+                VisibilityControlScreen(),
+            UserNameScreen.routeName: (ctx) => UserNameScreen(),
+            LoginPage.routeName: (ctx) => LoginPage(),
+            NameScreen.routeName: (ctx) => NameScreen(),
+            GameRulesScreen.routeName: (ctx) => GameRulesScreen(),
+            CheckpointsListScreen.routeName: (ctx) => CheckpointsListScreen(),
+            CheckInScreen.routeName: (ctx) => CheckInScreen(),
           },
         ),
       ),
