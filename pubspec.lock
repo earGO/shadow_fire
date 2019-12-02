@@ -111,20 +111,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_blue:
+  flutter_ble:
     dependency: "direct main"
     description:
-      name: flutter_blue
+      name: flutter_ble
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2"
-  flutter_bluetooth_serial:
-    dependency: "direct main"
-    description:
-      name: flutter_bluetooth_serial
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
+    version: "0.5.3"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -220,7 +213,7 @@ packages:
       name: protobuf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.4"
+    version: "0.13.16+1"
   provider:
     dependency: "direct main"
     description:
@@ -242,13 +235,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.22.6"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_ble/flutter_ble.dart';
 import 'package:shadowrun/types/check_in_arguments.dart';
 import 'package:shadowrun/widgets/check_in_dialogue.dart';
 
@@ -17,53 +17,93 @@ class CheckInScreen extends StatefulWidget {
 }
 
 class _CheckInScreenState extends State<CheckInScreen> {
-  StreamSubscription<BluetoothDiscoveryResult> _streamSubscription;
-  List<BluetoothDiscoveryResult> results = List<BluetoothDiscoveryResult>();
-  bool isDiscovering;
+  FlutterBle _flutterBlue = FlutterBle.instance;
+  /// Scanning
+  StreamSubscription _scanSubscription;
+  Map<DeviceIdentifier, ScanResult> scanResults = new Map();
+  bool isScanning = false;
 
-  _CheckInScreenState();
+  /// State
+  StreamSubscription _stateSubscription;
+  BluetoothState state = BluetoothState.unknown;
+
+  /// Device
+  BluetoothDevice device;
+  bool get isConnected => (device != null);
+  StreamSubscription deviceConnection;
+  StreamSubscription deviceStateSubscription;
+  List<BluetoothService> services = new List();
+  Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
+  BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
+
+
 
   @override
   void initState() {
     super.initState();
-
-    isDiscovering = widget.start;
-    if (isDiscovering) {
-      _startDiscovery();
-    }
-  }
-
-  void _startDiscovery() {
-    _streamSubscription =
-        FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
+    // Immediately get the state of FlutterBle
+    _flutterBlue.state.then((s) {
       setState(() {
-        results.add(r);
+        state = s;
       });
     });
-
-    _streamSubscription.onDone(() {
+    // Subscribe to state changes
+    _stateSubscription = _flutterBlue.onStateChanged().listen((s) {
       setState(() {
-        isDiscovering = false;
+        state = s;
       });
     });
+    _startScan();
   }
+
+  _startScan() {
+    _scanSubscription = _flutterBlue
+        .scan(
+      timeout: const Duration(seconds: 7),
+      /*withServices: [
+          new Guid('0000180F-0000-1000-8000-00805F9B34FB')
+        ]*/
+    )
+        .listen((scanResult) {
+      setState(() {
+        scanResults[scanResult.device.id] = scanResult;
+      });
+    }, onDone: _stopScan);
+
+    setState(() {
+      isScanning = true;
+    });
+  }
+
+  _stopScan() {
+    _scanSubscription?.cancel();
+    _scanSubscription = null;
+    setState(() {
+      isScanning = false;
+    });
+  }
+
 
   // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
 
   @override
   void dispose() {
-    // Avoid memory leak (`setState` after dispose) and cancel discovery
-    _streamSubscription?.cancel();
-
+    _stateSubscription?.cancel();
+    _stateSubscription = null;
+    _scanSubscription?.cancel();
+    _scanSubscription = null;
+    deviceConnection?.cancel();
+    deviceConnection = null;
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
     final CheckInArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(),
-      body: isDiscovering
+      body: isScanning
           ? Center(
               child: Container(
               height: MediaQuery.of(context).size.height * .25,
@@ -86,7 +126,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
             ))
           : CheckInDialogue(
               neededSsid: args.ssid,
-              devices: results,
+              devices: scanResults,
               locationName: args.locationName,
               locationId: args.locationId,
             ),

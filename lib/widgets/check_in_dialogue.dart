@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:provider/provider.dart';
 import '../providers/locations.dart';
 import '../connected/firebase_auth.dart';
 import '../providers/users.dart';
+import 'package:flutter_ble/flutter_ble.dart';
 
 class CheckInDialogue extends StatelessWidget {
-  final List<BluetoothDiscoveryResult> devices;
+  final Map<DeviceIdentifier, ScanResult>devices;
   final String neededSsid;
   final String locationName;
   final String locationId;
 
   CheckInDialogue({this.devices, this.neededSsid, this.locationName,this.locationId});
 
+  List<ScanResult> _extractResults(Map<DeviceIdentifier, ScanResult> results){
+    return results.values.map((value)=> value).toList();
+  }
+
   bool _deviceInSight() {
     var result = false;
-    devices.forEach((device) {
-      if (device.device.address == neededSsid) result = true;
+    final devicesList = _extractResults(devices);
+    devicesList.forEach((device) {
+      if (device.device.id.toString() == neededSsid) result = true;
     });
     return result;
   }
