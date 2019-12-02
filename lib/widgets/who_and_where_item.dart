@@ -15,7 +15,7 @@ class WhoAndWhereItem extends StatelessWidget {
             )
           : CircleAvatar(child: Icon(Icons.account_circle)),
       title: Text(user.name),
-      subtitle: Text(user.email),
+      subtitle: Text(user.locationId),
       trailing: Container(
         width: 30,
         child: Row(

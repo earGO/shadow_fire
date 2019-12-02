@@ -9,33 +9,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _username;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 100.0),
-              Text(
-                "Login",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-              const SizedBox(height: 20.0),
-              RaisedButton(
-                child: Text("Login with Google"),
-                onPressed: () => Provider.of<AuthProvider>(context,listen: false)
-                    .loginWithGoogle()
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
+    return Scaffold(
+      body: Center(
+        child: RaisedButton(
+          padding: EdgeInsets.all(0.0),
+            child: Container(
+              width: screenWidth * .55,
+              height: screenHeight * .055,
+              decoration: BoxDecoration(
+                color: Colors.white,
               ),
-            ],
-          ),
-        ),
+              padding: EdgeInsets.symmetric(
+                horizontal: 10, vertical: 6
+              ),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: screenWidth * .055,
+                    height: screenWidth * .055,
+                    child: Image.asset('google_logo.png'),
+                  ),
+                  Text("Login with Google"),
+                ],
+              ),
+            ),
+            onPressed: () => Provider.of<AuthProvider>(context, listen: false)
+                .loginWithGoogle()),
       ),
+      backgroundColor: Theme.of(context).primaryColor,
     );
   }
 }

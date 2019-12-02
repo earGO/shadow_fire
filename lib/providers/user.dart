@@ -12,6 +12,7 @@ class User with ChangeNotifier {
   bool wantToCommunicate;
   String avatar;
   num credits;
+  String locationId;
 
   User({
     @required this.name,
@@ -22,6 +23,7 @@ class User with ChangeNotifier {
     @required this.wantToBeHammered,
     @required this.wantToCommunicate,
     @required this.credits,
+    this.locationId
   });
 
   get getUser {
@@ -47,6 +49,7 @@ class User with ChangeNotifier {
       wantToBeHammered: parsedJson['user']['wantToBeHammered'],
       wantToCommunicate: parsedJson['user']['wantToCommunicate'],
       credits: parsedJson['user']['credits'],
+      locationId: parsedJson['user']['currentLocationId']
     );
   }
 

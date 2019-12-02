@@ -15,27 +15,25 @@ class Users with ChangeNotifier {
   String _currentName;
   num _currentCredits;
 
-
   List<User> get users {
     return [..._users];
   }
 
-  bool get currentHammered{
+  bool get currentHammered {
     return _currentHammered;
   }
 
-  bool get currentCommunicate{
+  bool get currentCommunicate {
     return _currentCommunicate;
   }
 
-  String get currentName{
+  String get currentName {
     return _currentName;
   }
 
-  num get currentCredits{
+  num get currentCredits {
     return _currentCredits;
   }
-
 
   List<User> get visibleUsers {
     return [..._visibleUsers];
@@ -54,21 +52,22 @@ class Users with ChangeNotifier {
     return _currentUser;
   }
 
-  void _setCurrentHammered(bool newValue){
+  void _setCurrentHammered(bool newValue) {
     _currentHammered = newValue;
     notifyListeners();
-}
-  void _setCurrentCommunicate(bool newValue){
+  }
+
+  void _setCurrentCommunicate(bool newValue) {
     _currentCommunicate = newValue;
     notifyListeners();
   }
 
-  void _setCurrentName(String newValue){
+  void _setCurrentName(String newValue) {
     _currentName = newValue;
     notifyListeners();
   }
 
-  void _setCurrentCredits(num newValue){
+  void _setCurrentCredits(num newValue) {
     _currentCredits = newValue;
     notifyListeners();
   }
@@ -99,9 +98,7 @@ class Users with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        body: json.encode({
-          'userId':_currentUser.getUser.uid
-        }),
+        body: json.encode({'userId': _currentUser.getUser.uid}),
         headers: {'Authorization': "Bearer $token"},
       );
 
@@ -133,11 +130,11 @@ class Users with ChangeNotifier {
                 ? false
                 : visibleArray.contains(userData['uid']),
             wantToBeHammered: userData['wantToBeHammered'],
-            wantToCommunicate: userData['wantToCommunicate']));
+            wantToCommunicate: userData['wantToCommunicate'],
+            locationId: userData['currentLocationId']));
       });
       _users = loadedUsers;
       notifyListeners();
-
     } catch (error) {
       throw (error);
     }
@@ -146,54 +143,58 @@ class Users with ChangeNotifier {
   Future<void> fetchVisibleUsers({String token, String currentUserId}) async {
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/getVisibleUsers';
-      final response = await http.post(
-        url,
-        body: json.encode({'userId': currentUserId}),
-        headers: {'Authorization': "Bearer $token"},
-      );
+    final response = await http.post(
+      url,
+      body: json.encode({'userId': currentUserId}),
+      headers: {'Authorization': "Bearer $token"},
+    );
 
-      final extractedData = json.decode(response.body)['users'];
-      if (extractedData == null) {
-        return;
-      }
-      final List<User> loadedUsers = [];
-      extractedData.forEach((userData) {
-        loadedUsers.add(User(
-            uid: userData['uid'],
-            avatar: userData['avatar'],
-            name: userData['name'],
-            email: userData['email'],
-            credits: userData['credits'],
-            visible: true,
-            wantToBeHammered: userData['wantToBeHammered'],
-            wantToCommunicate: userData['wantToCommunicate']));
-      });
-      _visibleUsers = loadedUsers;
-      notifyListeners();
+    final extractedData = json.decode(response.body)['users'];
+    if (extractedData == null) {
+      return;
+    }
+    final List<User> loadedUsers = [];
+    extractedData.forEach((userData) {
+      loadedUsers.add(
+        User(
+          uid: userData['uid'],
+          avatar: userData['avatar'],
+          name: userData['name'],
+          email: userData['email'],
+          credits: userData['credits'],
+          visible: true,
+          wantToBeHammered: userData['wantToBeHammered'],
+          wantToCommunicate: userData['wantToCommunicate'],
+          locationId: userData['currentLocationId'],
+        ),
+      );
+    });
+    _visibleUsers = loadedUsers;
+    notifyListeners();
   }
 
   Future<void> toggleCurrentUserHammered({String token}) async {
     final oldHammered = currentHammered;
     _setCurrentHammered(!currentHammered);
-      final url =
-          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/toggleHammered';
-      try {
-        final response = await http.post(
-          url,
-          body: json.encode({
-            'userId':_currentUser.uid,
-          }),
-          headers: {'Authorization': "Bearer $token"},
-        );
-        final responseData = await json.decode(response.body) as Map<String,dynamic>;
-        final responseMessage = responseData['message'];
-        if (responseMessage != 'good') {
-          _setCurrentHammered(oldHammered);
-        }
-      } catch (error) {
+    final url =
+        'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/toggleHammered';
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'userId': _currentUser.uid,
+        }),
+        headers: {'Authorization': "Bearer $token"},
+      );
+      final responseData =
+          await json.decode(response.body) as Map<String, dynamic>;
+      final responseMessage = responseData['message'];
+      if (responseMessage != 'good') {
         _setCurrentHammered(oldHammered);
       }
-
+    } catch (error) {
+      _setCurrentHammered(oldHammered);
+    }
   }
 
   Future<void> toggleCurrentUserCommunicate({String token}) async {
@@ -205,11 +206,12 @@ class Users with ChangeNotifier {
       final response = await http.post(
         url,
         body: json.encode({
-          'userId':_currentUser.uid,
+          'userId': _currentUser.uid,
         }),
         headers: {'Authorization': "Bearer $token"},
       );
-      final responseData = await json.decode(response.body) as Map<String,dynamic>;
+      final responseData =
+          await json.decode(response.body) as Map<String, dynamic>;
       final responseMessage = responseData['message'];
       if (responseMessage != 'good') {
         _setCurrentCommunicate(oldCommunicate);
@@ -217,7 +219,6 @@ class Users with ChangeNotifier {
     } catch (error) {
       _setCurrentCommunicate(oldCommunicate);
     }
-
   }
 
   Future<void> changeUserName({String token, String newName}) async {
@@ -229,15 +230,16 @@ class Users with ChangeNotifier {
       final response = await http.post(
         url,
         body: json.encode({
-          'userId':_currentUser.uid,
-          'newName':newName,
+          'userId': _currentUser.uid,
+          'newName': newName,
         }),
         headers: {'Authorization': "Bearer $token"},
       );
-      final responseData = await json.decode(response.body) as Map<String,dynamic>;
+      final responseData =
+          await json.decode(response.body) as Map<String, dynamic>;
       final responseMessage = responseData['message'];
       notifyListeners();
-      fetchAndSetUser(token: token,uid: currentUser.getUser.uid);
+      fetchAndSetUser(token: token, uid: currentUser.getUser.uid);
       if (responseMessage != 'good') {
         _setCurrentName(oldName);
       }
