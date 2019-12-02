@@ -61,20 +61,18 @@ android {
             storePassword keystoreProperties['storePassword']
         }
         release{
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['releaseKeyAlias']
+            keyPassword keystoreProperties['releaseKeyPassword']
+            storeFile file(keystoreProperties['releaseStoreFile'])
+            storePassword keystoreProperties['releaseStorePassword']
         }
     }
 
     buildTypes {
         release {
-
             signingConfig signingConfigs.release
         }
         debug {
-
             signingConfig signingConfigs.debug
         }
     }

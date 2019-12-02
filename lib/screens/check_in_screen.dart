@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:shadowrun/types/check_in_arguments.dart';
 import 'package:shadowrun/widgets/check_in_dialogue.dart';
-import '../widgets/bluetooth_device_list_entry.dart';
 
 class CheckInScreen extends StatefulWidget {
   /// If true, discovery starts on page start, otherwise user must press action button.

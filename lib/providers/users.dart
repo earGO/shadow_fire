@@ -116,8 +116,6 @@ class Users with ChangeNotifier {
       final visibleData =
           json.decode(visibleResponse.body) as Map<String, dynamic>;
       final visibleArray = visibleData['visibility'];
-      print(visibleArray.contains(ownerId));
-      print(ownerId);
       final List<User> loadedUsers = [];
       extractedData.forEach((userData) {
         loadedUsers.add(User(

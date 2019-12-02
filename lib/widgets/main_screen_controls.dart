@@ -9,7 +9,6 @@ import 'package:shadowrun/widgets/main_screen_small_icon.dart';
 import 'package:shadowrun/widgets/play_button.dart';
 import 'package:shadowrun/providers/users.dart';
 
-import 'package:shadowrun/connected/firebase_auth.dart';
 import 'package:shadowrun/screens/social_screen.dart';
 
 class MainScreenControls extends StatelessWidget {
