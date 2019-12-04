@@ -62,7 +62,7 @@ class CheckInDialogue extends StatelessWidget {
                           fontSize: 16,
                         ),),
                         onPressed: () {
-                          Provider.of<Locations>(context,listen: false).checkUserIn(
+                           Provider.of<Locations>(context,listen: false).checkUserIn(
                             token: token,
                             userId: userId,
                             locationId: locationId,
@@ -70,6 +70,10 @@ class CheckInDialogue extends StatelessWidget {
                                   .now()
                                   .millisecondsSinceEpoch
                           );
+                           Provider.of<Users>(context,listen: false).addReward(
+                               token: token,
+                              reward: 250
+                           );
                           Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
                         },
                       ),

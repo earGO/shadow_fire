@@ -36,7 +36,7 @@ class Users with ChangeNotifier {
     return _currentCredits;
   }
 
-  bool get currentVisibleToAll{
+  bool get currentVisibleToAll {
     return _currentVisibleToAll;
   }
 
@@ -260,7 +260,7 @@ class Users with ChangeNotifier {
   Future<void> toggleCurrentUserVisibleToAll({String token}) async {
     final oldVisibleToAll = currentVisibleToAll;
     _setCurrentVisibleToAll(!currentVisibleToAll);
-    if (oldVisibleToAll==false){
+    if (oldVisibleToAll == false) {
       final url =
           'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/makeVisibleToAll';
       try {
@@ -272,16 +272,42 @@ class Users with ChangeNotifier {
           headers: {'Authorization': "Bearer $token"},
         );
         final responseData =
-        await json.decode(response.body) as Map<String, dynamic>;
+            await json.decode(response.body) as Map<String, dynamic>;
         final responseMessage = responseData['message'];
         if (responseMessage != 'good') {
           _setCurrentVisibleToAll(oldVisibleToAll);
         }
-    } catch (error) {
+        notifyListeners();
+      } catch (error) {
         _setCurrentVisibleToAll(oldVisibleToAll);
+        notifyListeners();
+      }
     }
-    }
+  }
 
-
+  Future<void> addReward({String token, num reward}) async {
+    final oldCredits = _currentCredits;
+    _setCurrentCredits(reward);
+    notifyListeners();
+      final url =
+          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/giveReward';
+      try {
+        final response = await http.post(
+          url,
+          body: json.encode({
+            'userId': _currentUser.uid,
+            'reward':reward
+          }),
+          headers: {'Authorization': "Bearer $token"},
+        );
+        final responseData =
+            await json.decode(response.body) as Map<String, dynamic>;
+        final responseMessage = responseData['message'];
+        if (responseMessage != 'good') {
+          _setCurrentCredits(oldCredits);
+        }
+      } catch (error) {
+        _setCurrentCredits(oldCredits);
+      }
   }
 }
