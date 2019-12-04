@@ -14,6 +14,7 @@ class Users with ChangeNotifier {
   bool _currentCommunicate;
   String _currentName;
   num _currentCredits;
+  bool _currentVisibleToAll = false;
 
   List<User> get users {
     return [..._users];
@@ -33,6 +34,10 @@ class Users with ChangeNotifier {
 
   num get currentCredits {
     return _currentCredits;
+  }
+
+  bool get currentVisibleToAll{
+    return _currentVisibleToAll;
   }
 
   List<User> get visibleUsers {
@@ -69,6 +74,11 @@ class Users with ChangeNotifier {
 
   void _setCurrentCredits(num newValue) {
     _currentCredits = newValue;
+    notifyListeners();
+  }
+
+  void _setCurrentVisibleToAll(bool newValue) {
+    _currentVisibleToAll = newValue;
     notifyListeners();
   }
 
@@ -245,5 +255,33 @@ class Users with ChangeNotifier {
       _setCurrentName(oldName);
     }
     notifyListeners();
+  }
+
+  Future<void> toggleCurrentUserVisibleToAll({String token}) async {
+    final oldVisibleToAll = currentVisibleToAll;
+    _setCurrentVisibleToAll(!currentVisibleToAll);
+    if (oldVisibleToAll==false){
+      final url =
+          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/makeVisibleToAll';
+      try {
+        final response = await http.post(
+          url,
+          body: json.encode({
+            'userId': _currentUser.uid,
+          }),
+          headers: {'Authorization': "Bearer $token"},
+        );
+        final responseData =
+        await json.decode(response.body) as Map<String, dynamic>;
+        final responseMessage = responseData['message'];
+        if (responseMessage != 'good') {
+          _setCurrentVisibleToAll(oldVisibleToAll);
+        }
+    } catch (error) {
+        _setCurrentVisibleToAll(oldVisibleToAll);
+    }
+    }
+
+
   }
 }

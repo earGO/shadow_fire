@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shadowrun/widgets/locations_list_builder.dart';
 import '../connected/firebase_auth.dart';
 import '../providers/locations.dart';
+import '../providers/users.dart';
 
 class CheckpointsListScreen extends StatefulWidget {
   static String routeName = '/checkpoints-list';
@@ -18,13 +19,13 @@ class _CheckpointsListScreenState extends State<CheckpointsListScreen> {
   @override
   void didChangeDependencies() {
     final currentUserToken = Provider.of<AuthProvider>(context).token;
-    final locations = Provider.of<Locations>(context).locations;
+    final userId = Provider.of<Users>(context).currentUser.getUser.uid;
     if (_isInit) {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Locations>(context)
-          .fetchAndSetAllLocations(token: currentUserToken)
+      Provider.of<Locations>(context,listen: false)
+          .fetchAndSetAllLocations(token: currentUserToken,userId:userId )
           .then((_) {
         if (this.mounted) {
           setState(() {

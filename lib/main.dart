@@ -77,13 +77,7 @@ class MyApp extends StatelessWidget {
           ),
           home: auth.isAuth
               ? MainScreen()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, snapshot) =>
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? SplashScreen()
-                          : LoginPage(),
-                ),
+              :  LoginPage(),
           routes: {
             MainScreen.routeName: (ctx) => MainScreen(),
             SocialScreen.routeName: (ctx) => SocialScreen(),

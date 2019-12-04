@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shadowrun/screens/main_screen.dart';
 import '../providers/locations.dart';
 import '../connected/firebase_auth.dart';
 import '../providers/users.dart';
@@ -65,8 +66,11 @@ class CheckInDialogue extends StatelessWidget {
                             token: token,
                             userId: userId,
                             locationId: locationId,
+                              checkInTime: DateTime
+                                  .now()
+                                  .millisecondsSinceEpoch
                           );
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
                         },
                       ),
                     )

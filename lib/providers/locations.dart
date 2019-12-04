@@ -23,12 +23,15 @@ class Locations with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetAllLocations({String token}) async {
+  Future<void> fetchAndSetAllLocations({String token,String userId}) async {
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/getAllLocations';
     try {
-      final response = await http.get(
+      final response = await http.post(
         url,
+        body: json.encode({
+          'userId':userId
+        }),
         headers: {'Authorization': "Bearer $token"},
       );
 
@@ -38,15 +41,7 @@ class Locations with ChangeNotifier {
       }
       final List<Location> loadedLocations = [];
       extractedData.forEach((locationData) {
-        loadedLocations.add(Location(
-          name: locationData['label'],
-          id: locationData['locationId'],
-          ssid: locationData['ssid'],
-          unlocked: false,
-          timeToUnlock: DateTime.now().add(
-            Duration(seconds: 3600),
-          ),
-        ));
+        loadedLocations.add(new Location.fromJson(locationData));
       });
       _locations=loadedLocations;
       notifyListeners();
@@ -55,7 +50,7 @@ class Locations with ChangeNotifier {
     }
   }
 
-  Future<void> checkUserIn({String token,String userId,String locationId}) async {
+  Future<void> checkUserIn({String token,String userId,String locationId,num checkInTime}) async {
     final oldLocation = _currentLocation;
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/checkMeIn';
@@ -67,6 +62,7 @@ class Locations with ChangeNotifier {
         body: json.encode({
           'userId':userId,
           'locationId':locationId,
+          'checkInTime':checkInTime,
         }),
         headers: {'Authorization': "Bearer $token"},
       );
