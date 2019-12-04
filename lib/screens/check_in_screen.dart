@@ -18,10 +18,12 @@ class CheckInScreen extends StatefulWidget {
 
 class _CheckInScreenState extends State<CheckInScreen> {
   FlutterBle _flutterBlue = FlutterBle.instance;
+
   /// Scanning
   StreamSubscription _scanSubscription;
   Map<DeviceIdentifier, ScanResult> scanResults = new Map();
   bool isScanning = false;
+  bool wasError = false;
 
   /// State
   StreamSubscription _stateSubscription;
@@ -35,8 +37,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
   List<BluetoothService> services = new List();
   Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
-
-
 
   @override
   void initState() {
@@ -57,22 +57,29 @@ class _CheckInScreenState extends State<CheckInScreen> {
   }
 
   _startScan() {
-    _scanSubscription = _flutterBlue
-        .scan(
-      timeout: const Duration(seconds: 7),
-      /*withServices: [
+    try {
+      _scanSubscription = _flutterBlue
+          .scan(
+        timeout: const Duration(seconds: 7),
+        /*withServices: [
           new Guid('0000180F-0000-1000-8000-00805F9B34FB')
         ]*/
-    )
-        .listen((scanResult) {
-      setState(() {
-        scanResults[scanResult.device.id] = scanResult;
-      });
-    }, onDone: _stopScan);
+      )
+          .listen((scanResult) {
+        setState(() {
+          scanResults[scanResult.device.id] = scanResult;
+        });
+      }, onDone: _stopScan);
 
-    setState(() {
-      isScanning = true;
-    });
+      setState(() {
+        isScanning = true;
+      });
+    } catch (e) {
+      setState(() {
+        isScanning = false;
+        wasError = true;
+      });
+    }
   }
 
   _stopScan() {
@@ -82,7 +89,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
       isScanning = false;
     });
   }
-
 
   // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
 
@@ -97,39 +103,49 @@ class _CheckInScreenState extends State<CheckInScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final CheckInArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(),
-      body: isScanning
+      body: wasError
           ? Center(
-              child: Container(
-              height: MediaQuery.of(context).size.height * .25,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    'Определяю маяки вокруг',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  )
-                ],
+              child: Text(
+                'Проверьте, включён ли Bluetooth',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ))
-          : CheckInDialogue(
-              neededSsid: args.ssid,
-              devices: scanResults,
-              locationName: args.locationName,
-              locationId: args.locationId,
-            ),
+            )
+          : isScanning
+              ? Center(
+                  child: Container(
+                  height: MediaQuery.of(context).size.height * .25,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        'Определяю маяки вокруг',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    ],
+                  ),
+                ))
+              : CheckInDialogue(
+                  neededSsid: args.ssid,
+                  devices: scanResults,
+                  locationName: args.locationName,
+                  locationId: args.locationId,
+                ),
       backgroundColor: Theme.of(context).primaryColor,
     );
   }
