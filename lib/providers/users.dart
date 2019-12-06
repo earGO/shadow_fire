@@ -139,7 +139,9 @@ class Users with ChangeNotifier {
                 : visibleArray.contains(userData['uid']),
             wantToBeHammered: userData['wantToBeHammered'],
             wantToCommunicate: userData['wantToCommunicate'],
-            locationId: userData['currentLocationId']));
+            locationId: userData['currentLocationId'],
+            lastCheckIn: userData['lastCheckIn'],
+        status:userData['status']));
       });
       _users = loadedUsers;
       notifyListeners();
@@ -174,6 +176,8 @@ class Users with ChangeNotifier {
           wantToBeHammered: userData['wantToBeHammered'],
           wantToCommunicate: userData['wantToCommunicate'],
           locationId: userData['currentLocationId'],
+            lastCheckIn: userData['lastCheckIn'],
+          status: userData['status'],
         ),
       );
     });

@@ -7,6 +7,7 @@ class Implant with ChangeNotifier {
   num price;
   String description;
   num coeft;
+  String type;
 
   Implant({
     @required this.coeft,
@@ -15,6 +16,7 @@ class Implant with ChangeNotifier {
     @required this.id,
     @required this.name,
     @required this.price,
+    @required this.type,
   });
 
   get getImplant {
@@ -24,11 +26,12 @@ class Implant with ChangeNotifier {
   factory Implant.fromJson(Map<String, dynamic> parsedJson) {
     return Implant(
       id: parsedJson['id'],
-      name: parsedJson['locationId'],
-      icondata: parsedJson['ssid'],
+      name: parsedJson['name'],
+      icondata: parsedJson['icondata'],
       price: parsedJson['price'],
       description: parsedJson['description'],
       coeft: parsedJson['coeft'],
+        type:parsedJson['type'],
     );
   }
 }

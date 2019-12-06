@@ -13,6 +13,9 @@ class User with ChangeNotifier {
   String avatar;
   num credits;
   String locationId;
+  List<dynamic> implants;
+  String lastCheckIn;
+  String status;
 
   User({
     @required this.name,
@@ -23,7 +26,10 @@ class User with ChangeNotifier {
     @required this.wantToBeHammered,
     @required this.wantToCommunicate,
     @required this.credits,
-    this.locationId
+    this.locationId,
+    this.implants,
+    this.lastCheckIn,
+    this.status,
   });
 
   get getUser {
@@ -32,6 +38,10 @@ class User with ChangeNotifier {
 
   get wantHammered{
     return wantToBeHammered;
+  }
+
+  get userImplants{
+    return implants;
   }
 
   void _setVisibleToUser(bool newValue) {
@@ -49,7 +59,10 @@ class User with ChangeNotifier {
       wantToBeHammered: parsedJson['user']['wantToBeHammered'],
       wantToCommunicate: parsedJson['user']['wantToCommunicate'],
       credits: parsedJson['user']['credits'],
-      locationId: parsedJson['user']['currentLocationId']
+      locationId: parsedJson['user']['currentLocationId'],
+        implants:parsedJson['user']['implants'],
+        lastCheckIn: parsedJson['user']['lastCheckIn'],
+        status:parsedJson['user']['status'],
     );
   }
 

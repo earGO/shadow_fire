@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shadowrun/screens/installed_implants.dart';
 import 'package:shadowrun/screens/messages_screen.dart';
 import 'package:shadowrun/screens/profile_screen.dart';
-import 'package:shadowrun/screens/shop.dart';
+import 'package:shadowrun/screens/shop_screen.dart';
 
 import 'package:shadowrun/widgets/main_screen_small_icon.dart';
 import 'package:shadowrun/widgets/play_button.dart';

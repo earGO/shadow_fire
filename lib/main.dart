@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:shadowrun/providers/implants.dart';
 import 'package:shadowrun/screens/check_in_screen.dart';
 import 'package:shadowrun/screens/checkpoints_list_screen.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
@@ -8,9 +9,8 @@ import 'package:shadowrun/screens/main_screen.dart';
 import 'package:shadowrun/screens/messages_screen.dart';
 import 'package:shadowrun/screens/name_screen.dart';
 import 'package:shadowrun/screens/profile_screen.dart';
-import 'package:shadowrun/screens/shop.dart';
+import 'package:shadowrun/screens/shop_screen.dart';
 import 'package:shadowrun/screens/social_screen.dart';
-import 'package:shadowrun/screens/splash-screen.dart';
 import 'package:shadowrun/screens/user_name_screen.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
 import './screens/login_screen.dart';
@@ -66,6 +66,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Locations(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Implants(),
         ),
       ],
       child: Consumer<AuthProvider>(

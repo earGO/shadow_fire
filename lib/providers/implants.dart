@@ -28,6 +28,7 @@ class Implants with ChangeNotifier {
       }
       final List<Implant> loadedImplants = [];
       extractedData.forEach((locationData) {
+        print('fetched implant $locationData');
         loadedImplants.add(new Implant.fromJson(locationData));
       });
       _implants = loadedImplants;
