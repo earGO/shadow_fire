@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shadowrun/providers/implants.dart';
+import 'package:shadowrun/providers/messages.dart';
 import 'package:shadowrun/screens/check_in_screen.dart';
 import 'package:shadowrun/screens/checkpoints_list_screen.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
@@ -71,6 +72,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Implants(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Messages(),
         ),
       ],
       child: Consumer<AuthProvider>(

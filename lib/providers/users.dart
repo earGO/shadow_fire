@@ -16,6 +16,7 @@ class Users with ChangeNotifier {
   num _currentCredits;
   bool _currentVisibleToAll = false;
   String _currentRole;
+  List<dynamic> _currentMessages;
 
   List<User> get users {
     return [..._users];
@@ -36,6 +37,10 @@ class Users with ChangeNotifier {
   String get currentRole {
     return _currentRole;
   }
+
+  List<dynamic> get currentMessages{
+    return _currentMessages;
+}
 
   num get currentCredits {
     return _currentCredits;
@@ -101,6 +106,7 @@ class Users with ChangeNotifier {
     final workUser = new User.fromJson(decoded);
     _currentUser = workUser;
     _currentRole = workUser.role;
+    _currentMessages = workUser.messages;
     _setCurrentHammered(workUser.getUser.wantHammered);
     _setCurrentCommunicate(workUser.getUser.wantToCommunicate);
     _setCurrentName(workUser.getUser.name);
@@ -150,6 +156,7 @@ class Users with ChangeNotifier {
             lastCheckIn: userData['lastCheckIn'],
             status: userData['status'],
             role: userData['role'],
+              messages:userData['messages']
           ),
         );
       });
@@ -189,6 +196,7 @@ class Users with ChangeNotifier {
           lastCheckIn: userData['lastCheckIn'],
           status: userData['status'],
           role: userData['role'],
+            messages:userData['messages']
         ),
       );
     });

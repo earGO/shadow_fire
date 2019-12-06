@@ -17,6 +17,7 @@ class User with ChangeNotifier {
   String lastCheckIn;
   String status;
   String role;
+  List<dynamic> messages;
 
   User({
     @required this.name,
@@ -32,6 +33,7 @@ class User with ChangeNotifier {
     this.lastCheckIn,
     this.status,
     this.role,
+    this.messages
   });
 
   get getUser {
@@ -65,7 +67,8 @@ class User with ChangeNotifier {
         implants:parsedJson['user']['implants'],
         lastCheckIn: parsedJson['user']['lastCheckIn'],
         status:parsedJson['user']['status'],
-        role:parsedJson['user']['role']
+        role:parsedJson['user']['role'],
+        messages:parsedJson['user']['messages']
     );
   }
 
