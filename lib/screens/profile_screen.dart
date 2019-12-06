@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
-import 'package:shadowrun/screens/login_screen.dart';
+import 'package:shadowrun/screens/locations_rename_screen.dart';
 import 'package:shadowrun/screens/name_screen.dart';
 import '../providers/users.dart';
 import '../connected/firebase_auth.dart';
@@ -11,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<Users>(context).currentUser;
+    final currentRole = Provider.of<Users>(context).currentRole;
     final token = Provider.of<AuthProvider>(context).token;
     return Scaffold(
       body: SingleChildScrollView(
@@ -72,6 +73,17 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
             Divider(),
+            if(currentRole=='master')
+              ListTile(
+              leading: Icon(Icons.location_searching),
+              title: Text('Управлять локациями'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: () {
+                Navigator.of(context).pushNamed(LocationsRenameScreen.routeName);
+              },
+            ),
+            if(currentRole=='master')
+              Divider(),
             SizedBox(
               height: 64,
             ),

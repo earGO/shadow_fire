@@ -15,6 +15,7 @@ class Users with ChangeNotifier {
   String _currentName;
   num _currentCredits;
   bool _currentVisibleToAll = false;
+  String _currentRole;
 
   List<User> get users {
     return [..._users];
@@ -30,6 +31,10 @@ class Users with ChangeNotifier {
 
   String get currentName {
     return _currentName;
+  }
+
+  String get currentRole {
+    return _currentRole;
   }
 
   num get currentCredits {
@@ -95,6 +100,7 @@ class Users with ChangeNotifier {
     final decoded = await json.decode(response.body);
     final workUser = new User.fromJson(decoded);
     _currentUser = workUser;
+    _currentRole = workUser.role;
     _setCurrentHammered(workUser.getUser.wantHammered);
     _setCurrentCommunicate(workUser.getUser.wantToCommunicate);
     _setCurrentName(workUser.getUser.name);
@@ -128,7 +134,8 @@ class Users with ChangeNotifier {
       final visibleArray = visibleData['visibility'];
       final List<User> loadedUsers = [];
       extractedData.forEach((userData) {
-        loadedUsers.add(User(
+        loadedUsers.add(
+          User(
             uid: userData['uid'],
             avatar: userData['avatar'],
             name: userData['name'],
@@ -141,7 +148,10 @@ class Users with ChangeNotifier {
             wantToCommunicate: userData['wantToCommunicate'],
             locationId: userData['currentLocationId'],
             lastCheckIn: userData['lastCheckIn'],
-        status:userData['status']));
+            status: userData['status'],
+            role: userData['role'],
+          ),
+        );
       });
       _users = loadedUsers;
       notifyListeners();
@@ -176,8 +186,9 @@ class Users with ChangeNotifier {
           wantToBeHammered: userData['wantToBeHammered'],
           wantToCommunicate: userData['wantToCommunicate'],
           locationId: userData['currentLocationId'],
-            lastCheckIn: userData['lastCheckIn'],
+          lastCheckIn: userData['lastCheckIn'],
           status: userData['status'],
+          role: userData['role'],
         ),
       );
     });
@@ -293,25 +304,22 @@ class Users with ChangeNotifier {
     final oldCredits = _currentCredits;
     _setCurrentCredits(reward);
     notifyListeners();
-      final url =
-          'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/giveReward';
-      try {
-        final response = await http.post(
-          url,
-          body: json.encode({
-            'userId': _currentUser.uid,
-            'reward':reward
-          }),
-          headers: {'Authorization': "Bearer $token"},
-        );
-        final responseData =
-            await json.decode(response.body) as Map<String, dynamic>;
-        final responseMessage = responseData['message'];
-        if (responseMessage != 'good') {
-          _setCurrentCredits(oldCredits);
-        }
-      } catch (error) {
+    final url =
+        'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/giveReward';
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({'userId': _currentUser.uid, 'reward': reward}),
+        headers: {'Authorization': "Bearer $token"},
+      );
+      final responseData =
+          await json.decode(response.body) as Map<String, dynamic>;
+      final responseMessage = responseData['message'];
+      if (responseMessage != 'good') {
         _setCurrentCredits(oldCredits);
       }
+    } catch (error) {
+      _setCurrentCredits(oldCredits);
+    }
   }
 }

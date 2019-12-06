@@ -5,11 +5,13 @@ import 'package:shadowrun/screens/check_in_screen.dart';
 import 'package:shadowrun/screens/checkpoints_list_screen.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
 import 'package:shadowrun/screens/installed_implants.dart';
+import 'package:shadowrun/screens/locations_rename_screen.dart';
 import 'package:shadowrun/screens/main_screen.dart';
 import 'package:shadowrun/screens/messages_screen.dart';
 import 'package:shadowrun/screens/name_screen.dart';
 import 'package:shadowrun/screens/profile_screen.dart';
 import 'package:shadowrun/screens/shop_screen.dart';
+import 'package:shadowrun/screens/single_location_control_screen.dart';
 import 'package:shadowrun/screens/social_screen.dart';
 import 'package:shadowrun/screens/user_name_screen.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
@@ -97,6 +99,8 @@ class MyApp extends StatelessWidget {
             GameRulesScreen.routeName: (ctx) => GameRulesScreen(),
             CheckpointsListScreen.routeName: (ctx) => CheckpointsListScreen(),
             CheckInScreen.routeName: (ctx) => CheckInScreen(),
+            LocationsRenameScreen.routeName:(ctx)=>LocationsRenameScreen(),
+            SingleLocationControlScreen.routeName:(ctx)=>SingleLocationControlScreen(),
           },
         ),
       ),
