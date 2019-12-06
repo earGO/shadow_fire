@@ -12,7 +12,6 @@ class NameScreen extends StatefulWidget {
 }
 
 class _NameScreenState extends State<NameScreen> {
-  TextEditingController _nameTextController = new TextEditingController();
   final _nameFocusNode = FocusNode();
   var _isInit = true;
   var _isLoading = false;

@@ -8,9 +8,8 @@ class Location with ChangeNotifier {
   String id;
   String ssid;
   num lastCheckIn;
-  String locationLabel;
 
-  Location({this.name,  this.lastCheckIn, this.id, this.ssid,this.locationLabel});
+  Location({this.name,  this.lastCheckIn, this.id, this.ssid});
 
   get locationData {
     return this;
@@ -22,7 +21,6 @@ class Location with ChangeNotifier {
       id: parsedJson['locationId'],
       ssid: parsedJson['ssid'],
       lastCheckIn: parsedJson['lastCheckIn'],
-        locationLabel:parsedJson['label']
     );
   }
 }

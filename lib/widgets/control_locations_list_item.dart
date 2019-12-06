@@ -13,7 +13,6 @@ class ControlLocationsListItem extends StatelessWidget {
           Navigator.of(context).pushNamed(
             SingleLocationControlScreen.routeName,
             arguments: LocationControlsArguments(
-              locationLabel: locationData.locationLabel,
               locationName: locationData.name,
               locationId: locationData.id,
             ),
