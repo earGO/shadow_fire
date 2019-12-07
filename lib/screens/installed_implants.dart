@@ -5,6 +5,7 @@ import 'package:shadowrun/providers/implant.dart';
 import 'package:shadowrun/providers/users.dart';
 import 'package:shadowrun/connected/firebase_auth.dart';
 import 'package:shadowrun/widgets/installed_implant.dart';
+import 'package:shadowrun/screens/main_screen.dart';
 
 class InstalledImplants extends StatefulWidget {
   static String routeName = '/installed-implants';
@@ -59,6 +60,16 @@ class _InstalledImplantsState extends State<InstalledImplants> {
     final userInstalledImplants = installedImplants(implants,userImplants);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            const IconData(58820,
+                fontFamily: 'MaterialIcons', matchTextDirection: true),
+            color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+          },
+        ),
         title: Text('Импланты'),
       ),
       body: userImplants.length>0? Center(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shadowrun/providers/implants.dart';
 import 'package:shadowrun/providers/messages.dart';
@@ -22,7 +21,9 @@ import 'package:shadowrun/providers/users.dart';
 import 'package:shadowrun/providers/locations.dart';
 import 'connected/firebase_auth.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   static final Map<int, Color> primaryColor = {
@@ -84,9 +85,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: primaryColorCustom,
             secondaryHeaderColor: secondaryColorCustom,
           ),
-          home: auth.isAuth
-              ? MainScreen()
-              :  LoginPage(),
+          home: auth.isAuth ? MainScreen() : LoginPage(),
           routes: {
             MainScreen.routeName: (ctx) => MainScreen(),
             SocialScreen.routeName: (ctx) => SocialScreen(),
@@ -103,8 +102,9 @@ class MyApp extends StatelessWidget {
             GameRulesScreen.routeName: (ctx) => GameRulesScreen(),
             CheckpointsListScreen.routeName: (ctx) => CheckpointsListScreen(),
             CheckInScreen.routeName: (ctx) => CheckInScreen(),
-            LocationsRenameScreen.routeName:(ctx)=>LocationsRenameScreen(),
-            SingleLocationControlScreen.routeName:(ctx)=>SingleLocationControlScreen(),
+            LocationsRenameScreen.routeName: (ctx) => LocationsRenameScreen(),
+            SingleLocationControlScreen.routeName: (ctx) =>
+                SingleLocationControlScreen(),
           },
         ),
       ),

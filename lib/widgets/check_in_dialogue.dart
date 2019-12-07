@@ -61,14 +61,18 @@ class CheckInDialogue extends StatelessWidget {
                           color: Theme.of(context).secondaryHeaderColor,
                           fontSize: 16,
                         ),),
-                        onPressed: () {
-                           Provider.of<Locations>(context,listen: false).checkUserIn(
+                        onPressed: () async {
+                          final timezoneOffset = DateTime.now().timeZoneOffset.toString();
+                          final checkInTime = DateTime
+                              .now()
+                              .millisecondsSinceEpoch;
+                          print('tmezone offset for this will be $timezoneOffset');
+                           await Provider.of<Locations>(context,listen: false).checkUserIn(
                             token: token,
                             userId: userId,
                             locationId: locationId,
-                              checkInTime: DateTime
-                                  .now()
-                                  .millisecondsSinceEpoch
+                              checkInTime: checkInTime,
+                               timezoneOffset:timezoneOffset
                           );
                            Provider.of<Users>(context,listen: false).addReward(
                                token: token,

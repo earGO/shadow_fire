@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/connected/firebase_auth.dart';
+import 'package:shadowrun/screens/main_screen.dart';
 import 'package:shadowrun/screens/visibility_control_screen.dart';
 import 'package:shadowrun/widgets/how_others_see_me.dart';
 import 'package:shadowrun/widgets/set_communicate.dart';
@@ -55,6 +56,16 @@ class _SocialScreenState extends State<SocialScreen> {
           )
         : Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(
+                  const IconData(58820,
+                      fontFamily: 'MaterialIcons', matchTextDirection: true),
+                  color: Colors.white,
+                ),
+                onPressed: (){
+                  Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+                },
+              ),
               title: Text('Хочу'),
             ),
             body: Column(

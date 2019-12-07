@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shadowrun/screens/game_rules_screen.dart';
 import 'package:shadowrun/screens/locations_rename_screen.dart';
+import 'package:shadowrun/screens/login_screen.dart';
 import 'package:shadowrun/screens/name_screen.dart';
 import '../providers/users.dart';
 import '../connected/firebase_auth.dart';
@@ -91,8 +92,8 @@ class ProfileScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text('Выход'),
-              onTap: () {
-                Provider.of<AuthProvider>(context, listen: false).logOut();
+              onTap: () async {
+                await Provider.of<AuthProvider>(context, listen: false).logOut();
                 Navigator.of(context).pop();
               },
             ),

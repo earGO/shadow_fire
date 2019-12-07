@@ -51,7 +51,7 @@ class Locations with ChangeNotifier {
   }
 
   Future<void> checkUserIn(
-      {String token, String userId, String locationId, num checkInTime}) async {
+      {String token, String userId, String locationId, num checkInTime, String timezoneOffset}) async {
     final oldLocation = _currentLocation;
     final url =
         'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/checkMeIn';
@@ -64,6 +64,7 @@ class Locations with ChangeNotifier {
           'userId': userId,
           'locationId': locationId,
           'checkInTime': checkInTime,
+          'timezoneOffset':timezoneOffset
         }),
         headers: {'Authorization': "Bearer $token"},
       );

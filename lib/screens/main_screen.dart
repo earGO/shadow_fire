@@ -43,8 +43,19 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
-            )
+              child: Container(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Загружаю актуальные данные',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            ))
           : MainScreenControls(),
       backgroundColor: Theme.of(context).primaryColor,
     );

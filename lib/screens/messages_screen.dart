@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shadowrun/providers/message.dart';
 import 'package:shadowrun/providers/messages.dart';
 import 'package:shadowrun/providers/users.dart';
-import 'package:shadowrun/widgets/messages_list_builder.dart';
+import 'package:shadowrun/screens/main_screen.dart';
 
 import '../connected/firebase_auth.dart';
 
@@ -50,6 +50,16 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            const IconData(58820,
+                fontFamily: 'MaterialIcons', matchTextDirection: true),
+            color: Colors.white,
+          ),
+          onPressed: (){
+            Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+          },
+        ),
         title: Text('Сообщения'),
       ),
       body: _isLoading
