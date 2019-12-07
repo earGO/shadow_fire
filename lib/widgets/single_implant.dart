@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shadowrun/providers/implants.dart';
 import 'package:shadowrun/providers/users.dart';
 import 'package:shadowrun/providers/implant.dart';
+import 'package:shadowrun/connected/firebase_auth.dart';
+import 'package:shadowrun/screens/main_screen.dart';
 
 class SingleImplant extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<Users>(context).currentUser.getUser;
     final implant = Provider.of<Implant>(context).getImplant;
+    final token = Provider.of<AuthProvider>(context).token;
     print(implant.name);
     return user.implants.contains(implant.id)
         ? Container()
@@ -41,11 +45,22 @@ class SingleImplant extends StatelessWidget {
                         Text(
                           '\$ ${implant.price}',
                         ),
-                        FlatButton(
-                          child: Text('купить'),
-                          onPressed:
-                              user.credits >= implant.price ? () {} : null,
-                        )
+                        user.credits >= implant.price
+                            ? FlatButton(
+                                child: Text('купить'),
+                                onPressed: () async {
+                                  await Provider.of<Implants>(context,
+                                          listen: false)
+                                      .buyImplant(
+                                          token: token, userId: user.uid,implantId: implant.id);
+                                  Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+                                })
+                            : Text(
+                                'купить',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                ),
+                              ),
                       ],
                     ),
                   )

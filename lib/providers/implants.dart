@@ -8,9 +8,14 @@ import './implant.dart';
 
 class Implants with ChangeNotifier {
   List<Implant> _implants = [];
+  List<Implant> _installedImplants = [];
 
   List<Implant> get implants {
     return [..._implants];
+  }
+
+  List<Implant> get installedImplants {
+    return [..._installedImplants];
   }
 
   Future<void> fetchAndSetAllImplants({String token}) async {
@@ -32,6 +37,26 @@ class Implants with ChangeNotifier {
         loadedImplants.add(new Implant.fromJson(locationData));
       });
       _implants = loadedImplants;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> buyImplant({String token, String userId, String implantId}) async {
+    final url =
+        'https://us-central1-shadowrun-mobile.cloudfunctions.net/api/buyImplant';
+    try {
+      final response = await http.post(
+        url,
+        body:json.encode({
+          'userId':userId,
+          'implantId':implantId        }),
+        headers: {'Authorization': "Bearer $token"},
+      );
+
+      final extractedData = await json.decode(response.body)['message'];
+      print(extractedData);
       notifyListeners();
     } catch (error) {
       throw error;
